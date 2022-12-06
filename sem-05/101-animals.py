@@ -17,8 +17,8 @@ class InvalidSoundError(InvalidParameterError):
 
 class JungleAnimal:
     def __init__(self, name="", age= 0, sound=""):
-        # if not name or not age or not sound:
-        #     raise MissingParameterError
+        if not name or not age or not sound:
+            raise MissingParameterError
         if type(name) != str:
             raise InvalidParameterError("name")
         elif type(age) != int:
@@ -44,7 +44,7 @@ class Jaguar(JungleAnimal):
     def __init__(self, name, age, sound):
         if age > 15:
             raise InvalidAgeError("age")
-        elif len(sound) < 2:
+        elif sound.lower().count('r') < 2:
             raise InvalidSoundError("sound")
         super().__init__(name, age, sound)
 
@@ -90,9 +90,9 @@ class Lemur(JungleAnimal):
 
 class Human(JungleAnimal):
     def __init__(self, name, age, sound):
-        if age > 10:
+        if age < 10:
             raise InvalidAgeError("age")
-        elif 'e' not in sound:
+        elif 'a' not in sound:
             raise InvalidSoundError("sound")
         super().__init__(name, age, sound)
 
@@ -159,7 +159,7 @@ sounds = [
 
 for i in range(102):
     random = randint(0, 9)
-    ranAge = randint(0, 20)
+    ranAge = randint(7, 20)
     randNameIndex = randint(0, len(names)-1)
     randSoundIndex = randint(0, len(sounds)-1)
 
