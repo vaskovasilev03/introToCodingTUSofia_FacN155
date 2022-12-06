@@ -52,13 +52,15 @@ class Jaguar(JungleAnimal):
         super().print()
         print(f"Jaguar({self.name}, {self.age}, {self.sound})")
 
-    def __repr__(self): return 'Jaguar'
+    def __repr__(self): return f'Jaguar({self.name})'
 
     def daily_task(self, animals):
         super().daily_task()
         for obj in animals:
             if not type(obj) == Jaguar:
                 animal = animals.pop(animals.index(obj))
+                
+
                 print(f"{self.name} the Jaguar hunted down {obj.name} the {repr(animal)}")
                 break
 
@@ -74,7 +76,7 @@ class Lemur(JungleAnimal):
         super().print()
         print(f"Lemur({self.name}, {self.age}, {self.sound})")
 
-    def __repr__(self): return 'Lemur'
+    def __repr__(self): return f'Lemur({self.name})'
 
     def daily_task(self, fruitCount):
         if fruitCount >= 10:
@@ -100,24 +102,35 @@ class Human(JungleAnimal):
         super().print()
         print(f"Human({self.name}, {self.age}, {self.sound})")
 
-    def __repr__(self): return 'Human'
+    def __repr__(self): return f'Human({self.name})'
 
-    def daily_task(self, animals, buildings):
+    def daily_task(self, animals, buildings, types):
         i = animals.index(self)
 
-        if i == 0 and type(animals[i + 1]) == Human:
-            buildings.append(Building("Shelter"))
-            print(f'{self.name} the Human build a Shelter')
-        elif i == len(animals) - 1 and type(animals[i - 1]) == Human:
-            buildings.append(Building("Shelter"))
-            print(f'{self.name} the Human build a Shelter')
-        elif type(animals[i + 1]) == Human and type(animals[i - 1]) == Human:
-            buildings.append(Building("Shelter"))
-            print(f'{self.name} the Human build a Shelter')
+        randBuildType = randint(0, len(types)-1)
+        building = types[randBuildType]
+
+        if i == 0:
+            if type(animals[i + 1]) == Human:
+                buildings.append(Building(building, self.name))
+                print(f'{self.name} the Human build a {building}')
+        elif i == len(animals) - 1:
+            if type(animals[i - 1]) == Human:
+                buildings.append(Building(building, self.name))
+                print(f'{self.name} the Human build a {building}')
+        else:
+            if type(animals[i - 1]) == Human and type(animals[i + 1]) == Human:
+                buildings.append(Building(building, self.name))
+                print(f'{self.name} the Human build a {building}')
+
         
 class Building:
-    def __init__(self, type):
+    def __init__(self, type, owner):
         self.type = type
+        self.owner = owner
+    
+    def __repr__(self):
+        return f"{self.type}(Owner: {self.owner})"
 
 fruits = 10
 animals = []
@@ -156,6 +169,13 @@ sounds = [
     "I am a Human"
 ]
 
+buildingTypes = [
+    "Hut",
+    "Shelter",
+    "Tent",
+    "Campfire Place",
+    "Tree House"
+]
 
 for i in range(102):
     random = randint(0, 9)
@@ -189,7 +209,7 @@ for anim in animals:
     if type(anim) == Lemur:
         print(anim.daily_task(fruits))
     elif type(anim) == Human:
-        anim.daily_task(animals, buildings)
+        anim.daily_task(animals, buildings, buildingTypes)
     elif type(anim) == Jaguar:
         anim.daily_task(animals)
     else:
