@@ -3,28 +3,32 @@ class MissingParameterError(Exception):
     pass
 
 class InvalidParameterError(Exception):
-    def __init__(self, invalid_parameter, *args):
+    def __init__(self, invalid_parameter):
         self.invalid_parameter = invalid_parameter
-        self.message = f"Invalid class parameter: {invalid_parameter}"
-        super().__init__(self.message, *args)
+        message = f"Invalid class parameter: {invalid_parameter}"
+        super().__init__(message)
 
 class InvalidAgeError(InvalidParameterError):
-    pass
+    def __init__(self):
+        invalid_parameter = "age"
+        super().__init__(invalid_parameter)
 
 class InvalidSoundError(InvalidParameterError):
-    pass
+    def __init__(self):
+        invalid_parameter = "sound"
+        super().__init__(invalid_parameter)
 
 
 class JungleAnimal:
     def __init__(self, name="", age= 0, sound=""):
         if not name or not age or not sound:
-            raise MissingParameterError
+            raise MissingParameterError()
         if type(name) != str:
             raise InvalidParameterError("name")
         elif type(age) != int:
-            raise InvalidAgeError("age")
+            raise InvalidAgeError()
         elif type(sound) != str:
-            raise InvalidSoundError("sound")
+            raise InvalidSoundError()
         self.name = name
         self.age = age
         self.sound = sound
@@ -42,11 +46,12 @@ class JungleAnimal:
 
 class Jaguar(JungleAnimal):
     def __init__(self, name, age, sound):
-        if age > 15:
-            raise InvalidAgeError("age")
-        elif sound.lower().count('r') < 2:
-            raise InvalidSoundError("sound")
         super().__init__(name, age, sound)
+        if age > 15:
+            raise InvalidAgeError()
+        elif sound.lower().count('r') < 2:
+            raise InvalidSoundError()
+        
 
     def print(self):
         super().print()
@@ -56,21 +61,27 @@ class Jaguar(JungleAnimal):
 
     def daily_task(self, animals):
         super().daily_task()
-        for obj in animals:
-            if not type(obj) == Jaguar:
-                animal = animals.pop(animals.index(obj))
-                
-
-                print(f"{self.name} the Jaguar hunted down {obj.name} the {repr(animal)}")
+        for i in range(len(animals)):
+            if type(animals[i]) == Human or type(animals[i]) == Lemur:
+                print(f'{self.name} the Jaguar hunted down {animals[i].name} the {repr(animals[i])}')
+                del animals[i]
                 break
+
+    # def daily_task(self, animals):
+    #     super().daily_task()
+    #     for obj in animals:
+    #         if not type(obj) == Jaguar:
+    #             animal = animals.pop(animals.index(obj))
+    #             print(f"{self.name} the Jaguar hunted down {obj.name} the {repr(animal)}")
+    #             break
 
 class Lemur(JungleAnimal):
     def __init__(self, name, age, sound):
-        if age > 10:
-            raise InvalidAgeError("age")
-        elif 'e' not in sound:
-            raise InvalidSoundError("sound")
         super().__init__(name, age, sound)
+        if age > 10:
+            raise InvalidAgeError()
+        elif 'e' not in sound:
+            raise InvalidSoundError()
 
     def print(self):
         super().print()
@@ -82,21 +93,22 @@ class Lemur(JungleAnimal):
         if fruitCount >= 10:
             fruitCount -= 10
             print(f"{self.name} the Lemur ate a full meal of 10 fruits")
-        elif fruitCount == 0:
+        elif fruitCount > 0:
+            print(f"{self.name} the Lemur could only find {fruitCount} fruits")
+            fruitCount -= fruitCount
+        else:
             self.make_sound()
             self.make_sound()
             print(f"{self.name} the Lemur couldn't find anything to eat")
-        elif fruitCount < 10:
-            print(f"{self.name} the Lemur could only find {fruitCount} fruits")
-        return f"Fruits left: {fruitCount}" 
+        return f"Fruits: {fruitCount}"
 
 class Human(JungleAnimal):
     def __init__(self, name, age, sound):
-        if age < 10:
-            raise InvalidAgeError("age")
-        elif 'a' not in sound:
-            raise InvalidSoundError("sound")
         super().__init__(name, age, sound)
+        if age < 10:
+            raise InvalidAgeError()
+        elif 'a' not in sound:
+            raise InvalidSoundError()
 
     def print(self):
         super().print()
@@ -132,7 +144,7 @@ class Building:
     def __repr__(self):
         return f"{self.type}(Owner: {self.owner})"
 
-fruits = 10
+fruits = 6
 animals = []
 buildings = []
 
