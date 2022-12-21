@@ -1,4 +1,4 @@
-from errors import InvalidWeaponType
+
 from .item import Item
 
 class Weapon(Item):

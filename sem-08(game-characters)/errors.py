@@ -8,6 +8,9 @@ class InvalidDataFormat(Exception):
 class CharacterExists(Exception):
     pass
 
+class CharacterNotFound(Exception):
+    pass
+
 class InvalidCharacterClass(Exception):
     pass
 

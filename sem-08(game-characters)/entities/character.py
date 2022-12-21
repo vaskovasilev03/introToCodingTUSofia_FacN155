@@ -1,5 +1,7 @@
 from errors import InvalidCharacterClass
 from .weapon import Weapon
+from .item import Item
+
 class Character:
     CHARACTER_CLASSES = ("Warrior", "Mage", "Priest", "Rogue")
     def __init__(self, name, gender, rank) -> None:
@@ -18,8 +20,25 @@ class Character:
 
     def add_weapon(self, name, damage):
         if not self.weapon == None:
-            self.weapon.name = name
-            self.weapon.attack = damage
+            change = input("Character already has a weapon.\nAre you sure you want to change the current weapon?\ny/n: ")
+            if change == "y":
+                self.weapon.name = name
+                self.weapon.attack = damage
+                print("New Character Weapon Saved")
+            elif change == "n":
+                print("Old Character Weapon Kept")
         else:
             self.weapon = Weapon(name, damage)
             print("Character Weapon Added")
+
+    def add_item(self, name):
+        if not self.secondaryitem == None:
+            change = input("Character already has a secondary.\nAre you sure you want to change the current one?\ny/n: ")
+            if change == "y":
+                self.secondaryitem.name = name
+                print("New Character Item Saved")
+            elif change == "n":
+                print("Old Character Item Kept")
+        else:
+            self.secondaryitem = Item(name)
+            print("Character Secondary Item Added")
